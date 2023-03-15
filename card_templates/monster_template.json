@@ -1,0 +1,29 @@
+{
+    "#### DON'T COPY THIS LINE#### MONSTER TEMPLATE" :
+{
+    "name" : "",
+    "description" : "",
+    "health" : -1,
+    "dice" : -1 ,
+    "attack" : -1,
+    "effects" : [
+        {
+            "trigger": "",
+            "effect":""
+        }
+    ],
+    "reward" : {
+        "type" : "",
+        "amount" : -1
+    },
+    "souls" : -1
+},
+"#### DON'T COPY THIS LINE#### EVENT TEMPLATE":
+{
+
+},
+"#### DON'T COPY THIS LINE#### EVENT CURSE":
+{
+
+}
+}

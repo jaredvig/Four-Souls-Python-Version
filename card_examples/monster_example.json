@@ -1,0 +1,29 @@
+{
+    "monsters":[
+        {
+            "name" : "This is the monster's name that shows up: GORGI THE BEAST",
+            "description" : "EXAMPLE: When this monster's health is lower than 2, its dice value increases by one",
+            "health" : 3,
+            "dice" : 4,
+            "attack" : 2,
+            "effects" : [
+                {
+                    "trigger":"this.health<2",
+                    "effect":"this.dice+=1"
+                }
+            ],
+            "reward" : {
+                "type" : "Loot",
+                "amount" : 2
+            },
+            "souls" : 0
+        }
+    ],
+    "events":[
+    
+    ],
+    "curses":[
+        
+    ]
+    
+}
