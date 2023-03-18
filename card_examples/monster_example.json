@@ -9,7 +9,8 @@
             "effects" : [
                 {
                     "trigger":"this.health<2",
-                    "effect":"this.dice+=1"
+                    "effect":"this.dice+=1",
+                    "linkage":"Single"
                 }
             ],
             "reward" : {
@@ -20,10 +21,34 @@
         }
     ],
     "events":[
-    
+        {
+            "name" : "Event name",
+            "description" : "the bottom text of the event",
+            "effects" : [
+                {
+                    "trigger" : "reveal",
+                    "effect" : "dice = roll(6)",
+                    "linkage" : "Sync"
+                },
+                {
+                    "trigger" : "dice == 1 or dice == 2",
+                    "effect" : "active_character.loot(1)"
+                },
+                {
+                    "trigger" : "dice == 3 or dice == 4",
+                    "effect" : "active_character.gain_coin(3)"
+                },
+                {
+                    "trigger" : "dice == 5 or dice == 6",
+                    "effect" : "active_character.take_damage(2)"
+                }
+            ]
+        }
     ],
     "curses":[
-        
+        {
+
+        }
     ]
     
 }

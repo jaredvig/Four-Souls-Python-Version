@@ -1,0 +1,264 @@
+EFFECTS
+=========================================================================================================
+==============================
+AFFECTS HEALTH:
+==============================
+heal
+Heals the target by the value
+
+damage
+damages the target by the value
+
+prevent_damage
+prevents the next {value} amount of damage
+
+prevent_next_damage
+prevents the next {value} instances of damage
+
+gain_max_health
+gains {value} amount of max health
+
+lose_max_health
+loses {value} amount of max health
+==============================
+AFFECTS DEATH
+==============================
+kill
+kills the target
+
+prevent_death
+prevents the upcoming death
+
+==============================
+AFFECTS COINS
+==============================
+
+gain_coin
+the target gains {value} number of coins
+
+lose_coin
+the target loses {value} number of coins
+
+==============================
+AFFECTS ATTACKING THE MONSTER DECK
+==============================
+add_attacks
+allows for the player to attack the monster deck {value} more times
+
+cancel_attack
+cancels the current attack
+
+==============================
+AFFECTS SOULS
+==============================
+
+gain_soul_card
+turns this card into a soul card, given to target
+
+==============================
+AFFECTS GENERIC CARDS IN PLAY
+==============================
+
+destroy
+discards the target
+
+put_on_bottom
+puts the target on the bottom of its deck
+
+
+steal_item
+steals the targetted item
+
+==============================
+AFFECTS TURNS AND TURN ORDER
+==============================
+
+extra_turn
+gives the target an extra TURN
+
+skip_turn
+skips the target's next turn (current turn if they are the active player)
+
+==============================
+AFFECTS LOOT CARDS
+==============================
+
+steal_loot_card
+steals the targetted loot card
+
+draw_loot_card
+draws the {value} number of loot cards
+
+gain_as_item
+turns this into an item for the target. uses built in "item" {value} in json (generally used for trinkets)
+
+==============================
+AFFECTS DECKS
+==============================
+look_at_cards
+looks at the (hidden normally) target decks (value determines how many cards deep to look in a deck)
+
+replace
+replaces the targetted card with a card from the deck it comes from
+
+put_back_in_any_order
+puts the targets on the top of the deck in the chosen order
+
+discard_to_deck
+returns {value} targets from discard into its deck
+==============================
+AFFECTS STATS
+==============================
+
+subtract_die
+decreases the dice roll {value} of a monster by value
+
+increase_die
+increases the dice roll {value} of a monster by value
+
+increase_attack
+increases the attack by value
+
+decrease_attack
+decreases the attack by value
+
+double_rewards_for_turn
+doubles the rewards for the turn
+
+==============================
+AFFECTS DICE ROLLS
+==============================
+add_to_dice_roll
+adds {value} to your dice roll
+
+subtract_from_dice_roll
+subtracts the {value} from your dice roll
+
+reroll_dice
+rerolls a dice roll
+
+roll
+rolls a d6 {value} times
+
+change_roll
+changes the roll to {value}
+
+==============================
+AFFECTS ITEMS
+==============================
+
+cancel_effect
+cancels the effect of the targeted card
+
+reroll_item
+destroys the item, then replaces it with a different treasure
+
+copy_effect
+copies the targeted effect
+
+choice_destroy:
+lets the targeted player destroy one of their card (card_types are loot or item)
+
+give_this
+gives this card to target
+
+item_gains_eternal
+target gains eternal item for {value} turns
+
+recharge
+recharges the target
+==============================
+AFFECTS COUNTERS
+==============================
+
+place_counter
+adds  {value} number of {counter} counters to the target
+
+remove_counters
+removes {value} number of {counter} counters from target
+==============================
+AFFECTS MISC
+==============================
+change_value
+changes the {value} of one card by {value} until end of turn
+
+change_name
+changes the name of target
+
+return_to_hand
+returns a loot card (generally trinkets) to player's hand
+
+make_player_fightable
+allows active player to fight player, with player having a dice {value} of value
+
+discard_to_slots
+returns {value} target from discard into slot(active monsters or shop)
+
+
+
+=========================================================================================================
+TARGETS
+active_monsters
+can target all active monsters
+
+players
+can target all players
+
+other_players
+can only target other players
+
+monster_deck
+affects the monster deck
+
+loot_deck
+can affect the loot deck
+
+treasure_deck
+can affect the treasure deck
+
+eternal_item
+can affect all non-eternal items in play
+
+eternal_items
+can affect eternal items in play
+
+outside
+can affect cards outside of play
+
+souls
+can affect souls
+
+this_card
+can target this card
+=========================================================================================================
+TARGETTING METHOD
+random
+randomly picks from the existing targets
+
+active_player_choice
+the active player chooses the target
+
+all
+affects all of the target
+
+forced
+can only affect the pre-determined card/effect in "forced_choice"
+
+vote
+causes all players to vote for which target is affected, ties lead to fizzle
+=========================================================================================================
+EFFECT CHOICES
+choice
+player chooses one from all of these effects to activate
+
+dice
+rolls a dice to determine which effect is activated (uses the dice_rolls to keep track of which to do)
+
+then
+acts as a continuation from the previous effect
+
+=========================================================================================================
+ADDITIONAL USEFUL KEYWORDS
+may
+includes the choice of not doing the effect
+

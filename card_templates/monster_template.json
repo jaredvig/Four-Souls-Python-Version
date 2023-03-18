@@ -9,7 +9,8 @@
     "effects" : [
         {
             "trigger": "",
-            "effect":""
+            "effect":"",
+            "target": ""
         }
     ],
     "reward" : {

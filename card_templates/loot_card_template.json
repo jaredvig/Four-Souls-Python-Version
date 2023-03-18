@@ -1,0 +1,16 @@
+{
+    "name" : "",
+    "description" : "",
+    "effects": 
+    [
+        {
+            "effect" : "",
+            "targets" : [
+                ""
+            ],
+            "target_method": "",
+            "effect_method" : ""
+        }
+    ]
+
+}
