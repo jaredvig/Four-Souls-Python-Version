@@ -97,49 +97,18 @@ class Player_Character:
     #character functions
     def __init__(self,character_card, player):
         self.coins = 0
-        self.player_type= player
+        self.player_type = player
         character_card.charged = False
         self.character_card = character_card
         self.loot_cards = []
         self.items = []
         self.curses = []
         self.available_attacks = 1
-        self.free_loot_card = False
+        self.free_loot_cards = 1
         self.buyable_items = 1
         self.souls = 0
         for item in self.__items:
             item.charged = False
-    def draw_loot_card(self,loot_card):
-        print("draw loot card")
-        self.loot_cards.append(loot_card)
-
-
-    def add_coins(self,coins):
-        self.coins+=coins
-
-    def subtract_coins(self,coins_to_subtract):
-        self.coins-=coins_to_subtract
-
-    def add_curse(self, curse):
-        self.curses.append(curse)
-    def add_item(self,item):
-        self.items.append(item)
-
-    def lose_item(self,item):
-        self.items.remove(item)
-
-    def end_turn(self):
-        self.can_attack = False
-        self.free_loot_card = False
-        self.can_buy_item = False
-
-    def discard_loot_card(self,loot_card,discarded_loot):
-        self.loot_cards.remove(loot_card)
-
-
-    
-
-
 
 ################################################################################
 # FUNCTIONS
@@ -170,21 +139,20 @@ def load_player(player_id, module_name = None, level = 1):
     return locals()["Player"](player_id, level)
 
 def parse_command_line_args(args):
-    if "-f" in args: ai_file = args[args.index("-f") + 1].rstrip(".py")
+    #Getting the necessary AI file, if the user wants to use their own
+    if "-f" in args: ai_file = args[args.index("-f") + 1].rstrip(".py") 
     else: ai_file = DEFAULT_AI_FILE
-    
-    if "-l" in args:
-        levels = args[args.index("-l") + 1].split(',')
-        if len(levels) == 1: levels = (int(levels[0]), int(levels[0]))
-        else: levels = (int(levels[0]), int(levels[1]))
-    else: levels = (DEFAULT_AI_LEVEL, DEFAULT_AI_LEVEL)
     players = []
     total_num_players = -1
+
+    #Determines the amount of players in the game
     if "-p" in args:
         total_num_players = int(args[args.index("-p") + 1])
         if total_num_players < 2 or total_num_players>4: print("please choose 2-4 players"), sys.exit(1)
     else: players = []*total_num_players
     num_ai = -1
+    
+    #Determines how many of these players are AI
     if "-ai" in args:
         num_ai = int(args[args.index("-a") + 1])
         if num_ai > total_num_players: print("Please have less ais, than total players"), sys.exit(1) 
@@ -194,11 +162,12 @@ def parse_command_line_args(args):
             for i in range(num_ai):
                 players.append(ai_file)
     
+    #
     if "-mml" in args:
         levels = args[args.index("-l") + 1].split(',')
         if len(levels) == 1: levels = (int(levels[0]), int(levels[0]), int(levels[0]), int(levels[0]))
         else: levels = (int(levels[0]), int(levels[1]), int(levels[2]), int(levels[3]))
-    else: levels = (DEFAULT_AI_LEVEL, DEFAULT_AI_LEVEL)
+    else: levels = (DEFAULT_AI_LEVEL, DEFAULT_AI_LEVEL, DEFAULT_AI_LEVEL, DEFAULT_AI_LEVEL)
     return(players, levels)
 
 def shuffle(deck):
@@ -304,10 +273,6 @@ def play_game(players):
                 
                 else: #Card is an event card
                     print("Event")
-                    
-                
-
-                    
 
             #Buy Item
             elif active_player_choice == 4:
@@ -320,6 +285,7 @@ def play_game(players):
             #Invalid choice 
             else: print("Sorry, the inputted value is invalid, please try again")
         #######################################
+        #End Phase
         active_player_character.end_turn()
         current_active_player = (current_active_player+1)%len(players)
 
@@ -347,13 +313,17 @@ def play_game(players):
             shop.append(treasure_deck.remove[0])
         active_player.remove_coins(shop_price)
 
-    def discard_card(card,card_type):
+    def refill_slot(slot,deck):
+        slot.append(deck.remove[0])
+    def draw_loot_card(player):
+
+    def discard_card(card):
         if(card_type == "monster"):
             discarded_monster_deck.append(card)
         elif(card_type == "item"):
             discarded_item_deck.append(card)
         elif(card_type == "loot"):
-            discarded_item_deck.append(card)
+            discarded_loot_deck.append(card)
     def cancel_next_effect():
         stack.pop()
     def get_active_player_choice(player):
@@ -392,7 +362,7 @@ def play_game(players):
         print("Please choose a loot card:")
         if player.player_type is None:
             for loot_card in loot_cards:
-                print("Type ", loot_index, " to use ", loot_card.name)
+                print("Type ", loot_index, " to choose ", loot_card.name)
             return input()
     def play_loot_card(player):
         loot_index = choose_loot_card(player)
@@ -412,6 +382,84 @@ def play_game(players):
             for target in target_list:
                 print("Type ", target_index, " to target: ", target.name)
             return target_list[input()]
+        
+        ######################EFFECTS##############################
+        #==============================
+        #AFFECTS HEALTH:
+        #==============================
+    def heal(targets, value):
+        for target in targets:
+            target.health+=value
+            if(target.health>target.max_health):
+                target.health=target.max_health
+    def damage(targets,value):
+        for target in targets:
+            if target.prevent_next_damage<=0:
+                if target.prevented_damage>0:
+                    target.prevented_damage-=value
+                    if target.prevented_damage<0:
+                        target.health-= abs(target.prevented_damage)
+                if target.health<=0:
+                    target.health = 0
+            else:
+                target.prevent_next_damage-=1
+    def prevent_damage(targets,value):
+        for target in targets:
+            target.prevented_damage+=value
+    def prevent_next_damage(targets,value):
+        for target in targets:
+            target.prevented_damage+=value
+    def gain_max_health(targets,value):
+        for target in targets:
+            target.max_health +=value
+            target.health+=value
+    def lose_max_health(targets,value):
+        for target in targets:
+            target.max_health-=value
+            if target.health>target.max_health:
+                target.health = target.max_health
+    ###############
+    #AFFECTS DEATHS
+    ###############
+    def kill(targets):
+        for target in targets:
+            if target.death_prevents<=0:
+                target.health = 0
+                lose_coin(target,1)
+                target.destroy_item(target,1)
+                target.discard_loot(target,1)
+                deactivate_all_targets_items(target)
+            else:
+                target.death_prevents-=1
+    def prevent_death(targets,value):
+        for target in targets:
+            target.death_prevents +=value
+    #############
+    #AFFECTS COINS
+    #############
+    def gain_coins(targets,value):
+        for target in targets:
+            target.coins+=value
+    def lose_coins(targets,value):
+        for target in targets:
+            target.coins-=value
+            if target.coins<0:
+                target.coins = 0
+    #If the value is -1, it means that the player can infinitely attack the monster deck
+    def add_available_attacks(targets,value):
+        for target in targets:
+            if value == -1:
+                target.available_attacks = -1
+            else:
+                target.available_attacks+=value
+    def cancel_attack(targets):
+        print("cancel_attack")
+    def gain_as_soul_card(targets,card):
+        print("gain as soul card")
+    def 
+
+
+
         
 
         

@@ -33,16 +33,16 @@ prevents the upcoming death
 AFFECTS COINS
 ==============================
 
-gain_coin
+gain_coins
 the target gains {value} number of coins
 
-lose_coin
+lose_coins
 the target loses {value} number of coins
 
 ==============================
 AFFECTS ATTACKING THE MONSTER DECK
 ==============================
-add_attacks
+add_available_attacks
 allows for the player to attack the monster deck {value} more times
 
 cancel_attack
@@ -66,8 +66,7 @@ put_on_bottom
 puts the target on the bottom of its deck
 
 
-steal_item
-steals the targetted item
+
 
 ==============================
 AFFECTS TURNS AND TURN ORDER
@@ -91,6 +90,12 @@ draws the {value} number of loot cards
 
 gain_as_item
 turns this into an item for the target. uses built in "item" {value} in json (generally used for trinkets)
+
+discard_loot_card
+discards target into the loot deck
+
+put_loot_card_on_bottom
+puts the target on the bottom of the loot deck
 
 ==============================
 AFFECTS DECKS
@@ -161,6 +166,14 @@ lets the targeted player destroy one of their card (card_types are loot or item)
 
 give_this
 gives this card to target
+
+steal_item
+steals the targetted item
+
+discard_item
+puts the target into the item discard
+
+
 
 item_gains_eternal
 target gains eternal item for {value} turns
