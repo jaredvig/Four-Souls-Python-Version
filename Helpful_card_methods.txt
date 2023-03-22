@@ -73,7 +73,7 @@ AFFECTS TURNS AND TURN ORDER
 ==============================
 
 extra_turn
-gives the target an extra TURN
+gives the target an extra TURN after their next turn
 
 skip_turn
 skips the target's next turn (current turn if they are the active player)
@@ -82,11 +82,17 @@ skips the target's next turn (current turn if they are the active player)
 AFFECTS LOOT CARDS
 ==============================
 
-steal_loot_card
-steals the targetted loot card
+steal_loot_card_stealer_choice
+steals the a chosen loot card from the targeted player chosen by the user of the effect
+
+steal_loot_card_target_choice
+steals a chosen loot card from the targeted player chosen by the targeted player
+
+steal_loot_card_random_choice
+steals a chosen loot card from the targeted player at random
 
 draw_loot_card
-draws the {value} number of loot cards
+the target draws the {value} number of loot cards
 
 gain_as_item
 turns this into an item for the target. uses built in "item" {value} in json (generally used for trinkets)
@@ -118,13 +124,13 @@ AFFECTS STATS
 subtract_die
 decreases the dice roll {value} of a monster by value
 
-increase_die
+add_die
 increases the dice roll {value} of a monster by value
 
 increase_attack
 increases the attack by value
 
-decrease_attack
+subtract_attack
 decreases the attack by value
 
 double_rewards_for_turn
@@ -262,10 +268,10 @@ causes all players to vote for which target is affected, ties lead to fizzle
 =========================================================================================================
 EFFECT CHOICES
 choice
-player chooses one from all of these effects to activate
+player chooses one from all of these effects to activate IMPORTANT: THIS USES [] TO HOLD EFFECTS, RATHER THAN {}
 
-dice
-rolls a dice to determine which effect is activated (uses the dice_rolls to keep track of which to do)
+roll
+rolls a dice to determine which effect is activated (uses the dice_rolls to keep track of which to do) IMPORTANT: THIS USES {} TO HOLD EFFECTS, RATHER THAN []
 
 then
 acts as a continuation from the previous effect

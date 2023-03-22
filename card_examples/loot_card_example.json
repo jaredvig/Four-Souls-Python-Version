@@ -1,43 +1,40 @@
 {
     "name" : "Black Rune",
     "description" : "Roll - \n 1-2: Deal 1 Damage To Each Monster.\n 3-4: Reroll an Item. \n 5-6: Discard Your Hand. Then Loot 3",
+    "effect_choice" : "roll",
     "effects": 
-    [
-        {
+    {
+        "1,2" : {
             "effect" : "deal_damage",
             "targets" : [
                 "active_monsters"
             ],
-            "target method" : "all",
-            "effect method" : "roll",
-            "rolls needed" : ["1","2"]
+            "target method" : "all"
         },
-        {
+        "3,4" : {
             "effect" : "reroll_item",
             "targets" : [
                 "all_items"
             ],
-            "target_method": "user_choice",
-            "effect_method" : "roll",
-            "rolls needed" : ["3","4"]
+            "target_method": "user_choice"
         },
-        {
-            "effect" : "discard",
-            "targets" : [
-                "user.loot_cards"
-            ],
-            "target_method": "all",
-            "effect_choice" : "roll",
-            "rolls needed" : ["5","6"]
-        },
-        {
-            "effect" : "draw_loot_cards",
-            "targets" : [
-                "user"
-            ],
-            "effect_method" : "roll",
-            "effect_value" : "3"
+        "5,6": {
+            "effects":[
+                {
+                "effect" : "discard",
+                "targets" : [
+                    "user.loot_cards"
+                ],
+                "target_method": "all"
+                },
+                {
+                    "effect" : "draw_loot_cards",
+                    "targets" : [
+                        "user"
+                    ]
+                }
+            ]
         }
-    ]
+    }
 
 }

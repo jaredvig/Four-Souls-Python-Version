@@ -1,0 +1,18 @@
+{
+    "bonus_souls": [
+        {
+            "name" : "Soul Of Greed",
+            "trigger" : "gain_coins",
+            "requirement" : "coins",
+            "requirement_value" : "25",
+            "souls_worth" : 1
+        },
+        {
+            "name" : "Soul of Gluttony",
+            "trigger" : "gain_loot_card",
+            "requirement" : "len(loot_cards)",
+            "requirement_value" : "10",
+            "souls_worth" : 1
+        }
+    ]
+}

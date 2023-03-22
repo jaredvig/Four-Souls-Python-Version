@@ -1,0 +1,42 @@
+{
+    "items": [
+        {
+            "name": "Book of Sin",
+            "card_type": "Item",
+            "effect_choice": "roll",
+            "effects": {
+                "1,2": {
+                    "effects": [
+                        {
+                            "effect": "gain_coin",
+                            "targets": "self",
+                            "value": 1,
+                            "target_method": "all"
+                        }
+                    ]
+                },
+                "3,4": {
+                    "effects": [
+                        {
+                            "effect": "gain_loot_card",
+                            "targets": "self",
+                            "value": 1,
+                            "target_method": "all"
+                        }
+                    ]
+                },
+                "5,6": {
+                    "effects": [
+                        {
+                            "effect": "gain_max_health",
+                            "targets": "self",
+                            "value": 1,
+                            "target_method": "all"
+                        }
+                    ]
+                }
+            }
+        }
+
+    ]
+}

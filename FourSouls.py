@@ -36,26 +36,11 @@ class HumanPlayer():
 #Class for the characters that keeps track of their health, damage, and other pertinent stats
 #######################################################
 class Character:
-    def __init__(self, health = 2, attack = 1):
-        self.health = health
-        self.max_health = health
-        self.temp_health = 0
+    def __init__(self, health, attack,active_effect):
+        self.default_max_health = health
         self.default_attack = attack
-        self.attack = self.default_attack
+        self.active_effect = active_effect
         self.charged = False
-    def take_damage(self,damage):
-        self.health -=damage
-    def heal(self,heal_value):
-        self.health+=heal_value
-        if(self.health>self.max_health+self.temp_health):
-            self.health=self.max_health+self.temp_health
-    def add_attack(self,added_attack):
-        self.attack+=added_attack
-    def reset_character_temporary_effects(self):
-        self.health = self.max_health
-        self.attack = self.default_attack
-    def recharge_character(self):
-        self.charged = True
 
 
 #######################################################
@@ -98,8 +83,8 @@ class Player_Character:
     def __init__(self,character_card, player):
         self.coins = 0
         self.player_type = player
-        character_card.charged = False
         self.character_card = character_card
+        self.character_card.charged = False
         self.loot_cards = []
         self.items = []
         self.curses = []
@@ -107,6 +92,8 @@ class Player_Character:
         self.free_loot_cards = 1
         self.buyable_items = 1
         self.souls = 0
+        self.is_active = False
+        self.is_dead = False
         for item in self.__items:
             item.charged = False
 
@@ -243,37 +230,39 @@ def play_game(players):
             active_player_choice = get_active_player_choice(active_player_character)
             #PLAY FREE LOOT CARD, or activate player card
             if active_player_choice == 1:
-                loot_card, target = get_loot_card_choice(active_player_character)
-                play_loot_card(loot_card,target)
+                # loot_card, target = get_loot_card_choice(active_player_character)
+                # play_loot_card(loot_card,target)
+                print("play free loot card")
                 #PLAY ITEM
             elif active_player_choice == 2:
-                item, target = get_item_choice(active_player_character)
-                use_item(item,target)
+                ##item, target = get_item_choice(active_player_character)
+                ##use_item(item,target)
+                print("use item")
                 #ATTACKING MONSTER DECK
             elif active_player_choice == 3:
-                attacked_slot = get_attacked_monster(active_player_choice)
-                active_monster
-                if attacked_slot == 0:
-                    covered_slot = get_monster_slot(active_player)
-                    uncover_monster(covered_slot)
-                    new_monster = monster_deck.remove(0)
-                    active_monsters[covered_slot].append(monster_deck.remove(0))
+                # attacked_slot = get_attacked_monster(active_player_choice)
+                # active_monster
+                # if attacked_slot == 0:
+                #     covered_slot = get_monster_slot(active_player)
+                #     uncover_monster(covered_slot)
+                #     new_monster = monster_deck.remove(0)
+                #     active_monsters[covered_slot].append(monster_deck.remove(0))
 
-                else:
-                    active_monster = active_monsters[attacked_slot].pop()
+                # else:
+                #     active_monster = active_monsters[attacked_slot].pop()
                 
-                if active_monster.type == "Monster":
-                    print("Monster")
-                elif active_monster.type == "Curse":
-                    print("Curse")
-                    curse = active_monster
-                    target = choose_player(active_player_character)
-                    target.add_curse(curse)
+                # if active_monster.type == "Monster":
+                #     print("Monster")
+                # elif active_monster.type == "Curse":
+                #     print("Curse")
+                #     curse = active_monster
+                #     target = choose_player(active_player_character)
+                #     target.add_curse(curse)
 
                 
-                else: #Card is an event card
-                    print("Event")
-
+                # else: #Card is an event card
+                #     print("Event")
+                print("attacking monster deck")
             #Buy Item
             elif active_player_choice == 4:
                 print("buy item")
@@ -286,7 +275,7 @@ def play_game(players):
             else: print("Sorry, the inputted value is invalid, please try again")
         #######################################
         #End Phase
-        active_player_character.end_turn()
+        #active_player_character.end_turn()
         current_active_player = (current_active_player+1)%len(players)
 
 
@@ -313,19 +302,6 @@ def play_game(players):
             shop.append(treasure_deck.remove[0])
         active_player.remove_coins(shop_price)
 
-    def refill_slot(slot,deck):
-        slot.append(deck.remove[0])
-    def draw_loot_card(player):
-
-    def discard_card(card):
-        if(card_type == "monster"):
-            discarded_monster_deck.append(card)
-        elif(card_type == "item"):
-            discarded_item_deck.append(card)
-        elif(card_type == "loot"):
-            discarded_loot_deck.append(card)
-    def cancel_next_effect():
-        stack.pop()
     def get_active_player_choice(player):
         if player.player_type is None: 
             print("What are you going to do this turn?")
@@ -336,44 +312,43 @@ def play_game(players):
             print("Choose 5 to end your turn")
             return input()
    
-    def priority(player):
-        for i in range(len(players)-1):
-            player_priority = (player +i+1)%len(players)
-            #######PROMPT PLAYER FOR MOVE########
-            #######SKIP MEANS RETURN None########
-            #######USE CARD##############
-            used_card = get_player_input()
-            effect = None
-            if(used_card == None):
-                continue
-            else:
-                if(type(used_card) is LootCard):
-                    effect = play_loot_card(used_card)
-                elif(type(used_card) is Item):
-                    effect = play_item(used_card)
-                else:
-                    effect = use_character(used_card)
-                stack.append(effect)
-                priority(player_priority)
-        exec(stack.pop())
-    def choose_loot_card(player):
-        loot_cards = player.loot_cards
+    # def priority(player):
+    #     for i in range(len(players)-1):
+    #         player_priority = (player +i+1)%len(players)
+    #         #######PROMPT PLAYER FOR MOVE########
+    #         #######SKIP MEANS RETURN None########
+    #         #######USE CARD##############
+    #         used_card = get_player_input()
+    #         effect = None
+    #         if(used_card == None):
+    #             continue
+    #         else:
+    #             if(type(used_card) is LootCard):
+    #                 effect = play_loot_card(used_card)
+    #             elif(type(used_card) is Item):
+    #                 effect = play_item(used_card)
+    #             else:
+    #                 effect = use_character(used_card)
+    #             stack.append(effect)
+    #             priority(player_priority)
+    #     exec(stack.pop())
+    def choose_loot_card(player,loot_cards):
         loot_index = 1
         print("Please choose a loot card:")
         if player.player_type is None:
             for loot_card in loot_cards:
                 print("Type ", loot_index, " to choose ", loot_card.name)
             return input()
-    def play_loot_card(player):
-        loot_index = choose_loot_card(player)
-        loot_card = player.loot_cards[loot_index-1]
-        effects, targets = get_effects_and_targets(loot_card)
-        total_effect_string = ""
-        for effect in effects:
-            for target in targets:
-                effect_string = effect,"(",target,");"
-                total_effect_string+=effect_string
-        return total_effect_string
+    # def play_loot_card(player):
+    #     loot_index = choose_loot_card(player)
+    #     loot_card = player.loot_cards[loot_index-1]
+    #     effects, targets = get_effects_and_targets(loot_card)
+    #     total_effect_string = ""
+    #     for effect in effects:
+    #         for target in targets:
+    #             effect_string = effect,"(",target,");"
+    #             total_effect_string+=effect_string
+    #     return total_effect_string
         
         #USE ALL APPLICABLE LISTS FOR A TARGET
     def choose_target(target_list):
@@ -381,28 +356,64 @@ def play_game(players):
             target_index = 1
             for target in target_list:
                 print("Type ", target_index, " to target: ", target.name)
+                target_index+=1
             return target_list[input()]
         
+    
+
+    ###################IMPORTANT BASE FUNCTIONS#########################
+    def heal(target,value):
+        on_trigger_heal_local(target)
+        on_trigger_heal_global()
+        target.health+=value
+        if(target.health>target.max_health):
+            target.health=target.max_health
+    def damage(target,value):
+        # on_trigger_damage_local(target)
+        # on_trigger_damage_global()
+        if target.prevent_next_damage<=0:
+            if target.prevented_damage>0:
+                target.prevented_damage-=value
+                if target.prevented_damage<0:
+                    target.health-= abs(target.prevented_damage)
+                else:
+                    target.health -=value
+            if target.health<=0:
+                target.health = 0
+        else:
+                target.prevent_next_damage-=1
+    def player_death(player):
+        player.is_dead = True
+        # trigger_pre_death_local(player)
+        # trigger_pre_death_global()
+        if player.is_dead:
+            # if target.loot_death_penalty is None:
+            #     # discarded_loot_card = choose_loot_card(target)
+            # if target.item_death_penalty is None:
+            #     # destroyed_item = choose_destroy_item(target)
+            # if target.coin_death_penalty is None:
+            #     lost_coin = lose_coin(target,1)
+            # trigger_post_death_local(target)
+            # trigger_post_death_global()
+            if(player.is_active):
+                end_turn(player)
+    def roll_dice(num_dice):
+        rolls = []
+        for i in range(num_dice):
+            rolls[i] = random.random()*6+1
+        return {"dice_rolls" : rolls}
+    def monster_death(monster):
+        print(monster.name, " died")
         ######################EFFECTS##############################
         #==============================
         #AFFECTS HEALTH:
         #==============================
-    def heal(targets, value):
+    def effect_heal(targets, value):
         for target in targets:
-            target.health+=value
-            if(target.health>target.max_health):
-                target.health=target.max_health
-    def damage(targets,value):
+            heal(target,value)
+    def effect_damage(targets,value):
         for target in targets:
-            if target.prevent_next_damage<=0:
-                if target.prevented_damage>0:
-                    target.prevented_damage-=value
-                    if target.prevented_damage<0:
-                        target.health-= abs(target.prevented_damage)
-                if target.health<=0:
-                    target.health = 0
-            else:
-                target.prevent_next_damage-=1
+            damage(target,value)
     def prevent_damage(targets,value):
         for target in targets:
             target.prevented_damage+=value
@@ -425,10 +436,10 @@ def play_game(players):
         for target in targets:
             if target.death_prevents<=0:
                 target.health = 0
-                lose_coin(target,1)
-                target.destroy_item(target,1)
-                target.discard_loot(target,1)
-                deactivate_all_targets_items(target)
+                # # lose_coin(target,1)
+                # target.destroy_item(target,1)
+                # target.discard_loot(target,1)
+                # deactivate_all_targets_items(target)
             else:
                 target.death_prevents-=1
     def prevent_death(targets,value):
@@ -437,26 +448,97 @@ def play_game(players):
     #############
     #AFFECTS COINS
     #############
-    def gain_coins(targets,value):
+    def effect_gain_coins(targets,value):
         for target in targets:
             target.coins+=value
-    def lose_coins(targets,value):
+    def effect_lose_coins(targets,value):
         for target in targets:
             target.coins-=value
             if target.coins<0:
                 target.coins = 0
     #If the value is -1, it means that the player can infinitely attack the monster deck
-    def add_available_attacks(targets,value):
+    def effect_add_available_attacks(targets,value):
         for target in targets:
             if value == -1:
                 target.available_attacks = -1
             else:
                 target.available_attacks+=value
-    def cancel_attack(targets):
+    def effect_cancel_attack(targets):
         print("cancel_attack")
-    def gain_as_soul_card(targets,card):
+    def effect_gain_as_soul_card(targets,card):
         print("gain as soul card")
-    def 
+
+        #Adds an extra turn to the player after their next turn
+    def effect_extra_turn(targets,value):
+        for target in targets:
+            target.extra_turns+=value
+    def effect_skip_turn(targets,value):
+        for target in targets:
+            target.skipped_turns+=value
+    def effect_steal_loot_card_stealer_choice(player,targets,value):
+        for target in targets:
+            print("steal loot card chosen by stealer")
+
+    def effect_steal_loot_card_target_choice(player,targets,value):
+        for target in targets:
+            print("steal loot card chosen by target")
+    
+    def effect_steal_loot_card_random_choice(player,targets,value):
+        for target in targets:
+            print("steal loot card chosen by target")
+    def effect_draw_loot_card(targets, value):
+        for target in targets:
+            for draw in range(value):
+                print("draw one loot")
+    def effect_gain_as_item(targets,value):
+        for target in targets:
+            print("gain as item")
+    def effect_discard_loot_card(targets,value):
+        for target in targets:
+            print("Discard loot card")
+    def effect_put_loot_card_on_bottom(targets,value):
+        for target in targets:
+            print("put loot card on bottom")
+    #####################AFFECTS DECKS#####################
+    def effect_look_at_cards(targets,value):
+        for target in targets:
+            for card in range(value):
+                print("look at next deck")
+    
+    ##############AFFECTS STATS#####################
+    # def effect_subtract_die(targets,value):
+    #     for target in targets:
+    #         subtract_die(target,value)
+    
+    # def effect_increase_die(targets,value):
+    #     for target in targets:
+    #         # add_die(target,value)
+    # def effect_increase_attack(targets,value):
+    #     for target in targets:
+    #         add_attack(target,value)
+    # def effect_subtract_attack(targets,value):
+    #     for target in targets:
+    #         subtract_attack(target,value)
+    # def double_rewards():
+    #     print("doubles the rewards")
+    ##############AFFECTS DICE ROLLS##################
+
+
+    ############TRIGGERS FOR PASSIVES##################
+    def on_trigger_heal_local(player):
+        print(player, " healed")
+    def on_trigger_heal_global():
+        print("someone/something healed")
+    def player_on_trigger_damage_local(player):
+        print("ouch")
+
+
+
+
+
+
+            
+
 
 
 

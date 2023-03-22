@@ -1,0 +1,11 @@
+{
+    "characters":[
+        {
+            "name": "Isaac",
+            "default_max_health":2,
+            "default_attack":1,
+            "default_effect":"play_loot_card",
+            "starting_item_name": "D6"
+        }
+    ]
+}
